@@ -31,11 +31,7 @@ class BusinessCell: UITableViewCell {
             reviewsCountLabel.text = "\(business.reviewCount!)"
             ratingImageView.setImageWith(business.ratingImageURL!, placeholderImage: nil)
             distanceLabel.text = business.distance
-            
-            
         }
-        
-        
     }
     
     override func awakeFromNib() {
@@ -45,14 +41,14 @@ class BusinessCell: UITableViewCell {
         thumbImageView.layer.cornerRadius = 6
         thumbImageView.clipsToBounds = true
         
-        nameLabel.preferredMaxLayoutWidth = nameLabel.frame.size.width
+//        nameLabel.preferredMaxLayoutWidth = nameLabel.frame.size.width
         
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        nameLabel.preferredMaxLayoutWidth = nameLabel.frame.size.width
+//        nameLabel.preferredMaxLayoutWidth = nameLabel.frame.size.width
         
     }
     
