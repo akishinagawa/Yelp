@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "46BC597E1AC1050C387DBB2BB4B4B1D2A5443239",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "46BC597E1AC1050C387DBB2BB4B4B1D2A5443239" : 9223372036854775807,
+    "1F013AAE553E88FD1FCBF5F7E337A3E8D9961008" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "37DD76DD-75DC-4894-B04E-C17373D48C09",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "46BC597E1AC1050C387DBB2BB4B4B1D2A5443239" : "Yelp\/",
+    "1F013AAE553E88FD1FCBF5F7E337A3E8D9961008" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Yelp",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Yelp.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Vungle\/publisher-sample-android.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1F013AAE553E88FD1FCBF5F7E337A3E8D9961008"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/akishinagawa\/Yelp.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "46BC597E1AC1050C387DBB2BB4B4B1D2A5443239"
+    }
+  ]
+}
