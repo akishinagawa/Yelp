@@ -25,6 +25,9 @@ class YelpClient: BDBOAuth1RequestOperationManager {
     var accessToken: String!
     var accessSecret: String!
     
+    var limitDataNum = 20
+    var reloadCount = 0
+    
     //MARK: Shared Instance
     
     static let sharedInstance = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
@@ -43,11 +46,11 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         self.requestSerializer.saveAccessToken(token)
     }
     
-    func searchWithTerm(_ term: String, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
-        return searchWithTerm(term, sort: nil, categories: nil, deals: nil, distance:nil, completion: completion)
+    func searchWithTerm(_ term: String, reloadCount: Int?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
+        return searchWithTerm(term, sort: nil, categories: nil, deals: nil, distance:nil, reloadCount: reloadCount, completion: completion)
     }
     
-    func searchWithTerm(_ term: String, sort: YelpSortMode?, categories: [String]?, deals: Bool?, distance: Double?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
+    func searchWithTerm(_ term: String, sort: YelpSortMode?, categories: [String]?, deals: Bool?, distance: Double?, reloadCount: Int?, completion: @escaping ([Business]?, Error?) -> Void) -> AFHTTPRequestOperation {
         // For additional parameters, see http://www.yelp.com/developers/documentation/v2/search_api
         
         // Default the location to San Francisco
@@ -68,6 +71,15 @@ class YelpClient: BDBOAuth1RequestOperationManager {
             parameters["radius_filter"] = distance! as AnyObject?
         }
 
+        
+        
+        parameters["offset"] = (reloadCount! * limitDataNum) as AnyObject?
+        parameters["limit"] = limitDataNum as AnyObject?
+        
+        
+        
+        
+        
         print(parameters)
         
         return self.get("search", parameters: parameters,

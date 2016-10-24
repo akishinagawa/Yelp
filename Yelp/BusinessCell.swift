@@ -23,10 +23,11 @@ class BusinessCell: UITableViewCell {
     @IBOutlet weak var openCloseLabel: UILabel!
     @IBOutlet weak var aboutRestaurant: UILabel!
     
+    var cellId:Int = -1
 
     var business: Business! {
         didSet {
-            self.nameLabel.text = business.name
+            self.nameLabel.text = String(cellId) + ". " +  business.name!
             
             thumbImageView.setImageWith(business.imageURL!, placeholderImage: nil)
             categoryLabel.text = business.categories

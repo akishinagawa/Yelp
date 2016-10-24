@@ -8,12 +8,16 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate, UISearchBarDelegate {
+class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate, UISearchBarDelegate, UIScrollViewDelegate {
     
     var businesses: [Business]!
     var searchedBusinesses: [Business]!
     var searchBar: UISearchBar!
     var isOnSearched: Bool!
+    var isMoreDataLoading: Bool!
+    var reloadDataCount: Int!
+    var previousFilters: [String : AnyObject]!
+    var previousSearchedText:String!
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -27,13 +31,16 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         searchBar.delegate = self
         navigationItem.titleView = searchBar
         isOnSearched = false
+        isMoreDataLoading = false
+        reloadDataCount = 0
+        previousSearchedText = String("")
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
-        Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: "Thai", reloadCount: reloadDataCount, completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
             
@@ -87,9 +94,11 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
         
         if isOnSearched == true {
+            cell.cellId = indexPath.row + 1
             cell.business = searchedBusinesses[indexPath.row]
         }
         else {
+            cell.cellId = indexPath.row + 1
             cell.business = businesses[indexPath.row]
         }
         
@@ -122,10 +131,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             
             searchedBusinesses = []
             isOnSearched = false
+            previousSearchedText = ""
             self.tableView.reloadData()
         }
         else{
             isOnSearched = true
+            previousSearchedText = searchText
             prepareSerachedData(searchText: searchText)
         }
     }
@@ -154,6 +165,79 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.reloadData()
     }
     
+    
+    // TableView related ---
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        print("did scroll ------------------------------------<<<<<<<< ")
+        
+        if (!isMoreDataLoading) {
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            if (scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+                isMoreDataLoading = true
+                loadMoreData()
+            }
+        }
+    }
+    
+    
+    func loadMoreData() {
+        
+        reloadDataCount! += 1
+        
+        if previousFilters != nil {
+            
+            let sortBy = YelpSortMode(rawValue:(previousFilters["sortBy"] as! Int))
+            let categories = previousFilters["categories"] as? [String]
+            let deals = previousFilters["deal"] as? Bool
+            let distance = previousFilters["distance"] as? Double
+            
+            Business.searchWithTerm(term: "Thai", sort: sortBy, categories: categories, deals: deals, distance:distance, reloadCount: 0, completion: { (businesses: [Business]?, error: Error?) -> Void in
+                
+                if self.reloadDataCount > 0 { // reload case
+                    self.businesses = self.businesses + businesses!
+                    if self.isOnSearched == true {
+                        self.prepareSerachedData(searchText: self.previousSearchedText)
+                    }
+                   
+                    self.tableView.reloadData()
+                }
+                else {
+                    self.businesses = businesses
+                    if self.isOnSearched == true {
+                        self.prepareSerachedData(searchText: self.previousSearchedText)
+                    }
+
+                    self.tableView.reloadData()
+                }
+                self.isMoreDataLoading = false
+            })
+        }
+        else {
+            Business.searchWithTerm(term: "Thai", reloadCount: reloadDataCount, completion: { (businesses: [Business]?, error: Error?) -> Void in
+                if self.reloadDataCount > 0 { // reload case
+                    self.businesses = self.businesses + businesses!
+                    if self.isOnSearched == true {
+                        self.prepareSerachedData(searchText: self.previousSearchedText)
+                    }
+                    
+                    self.tableView.reloadData()
+                }
+                else {
+                    self.businesses = businesses
+                    if self.isOnSearched == true {
+                        self.prepareSerachedData(searchText: self.previousSearchedText)
+                    }
+                    
+                    self.tableView.reloadData()
+                }
+                self.isMoreDataLoading = false
+            })
+        }
+    }
 
      // MARK: - Navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -164,23 +248,19 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
      }
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-        
-        
+        reloadDataCount = 0 // new serach filters - so need to reset reloadDataCount
+        previousFilters = filters
+       
         let sortBy = YelpSortMode(rawValue:(filters["sortBy"] as! Int))
         let categories = filters["categories"] as? [String]
         let deals = filters["deal"] as? Bool
         let distance = filters["distance"] as? Double
         
-        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: deals, distance:distance, completion: { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: deals, distance:distance, reloadCount: 0, completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
 
         })
-        
-        
-        
-        
-        
     }
     
 }
