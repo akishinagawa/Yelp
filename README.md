@@ -17,7 +17,7 @@ The following **required** functionality is completed:
 - [x] The filters table should be organized into sections as in the mock.
 - [x] You can use the default UISwitch for on/off states.
 - [x] Clicking on the "Search" button should dismiss the filters page and trigger the search w/ the new filter settings.
-- [?] Display some of the available Yelp categories (choose any 3-4 that you want).
+- [x] Display some of the available Yelp categories (choose any 3-4 that you want).
 
 The following **optional** features are implemented:
 

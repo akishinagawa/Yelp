@@ -67,8 +67,7 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         if distance != nil {
             parameters["radius_filter"] = distance! as AnyObject?
         }
-        
-        print("------------------>>>> ")
+
         print(parameters)
         
         return self.get("search", parameters: parameters,

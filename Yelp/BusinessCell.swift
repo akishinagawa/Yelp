@@ -19,6 +19,9 @@ class BusinessCell: UITableViewCell {
     @IBOutlet weak var reviewsCountLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var phoneLabel: UILabel!
+    @IBOutlet weak var openCloseLabel: UILabel!
+    @IBOutlet weak var aboutRestaurant: UILabel!
     
 
     var business: Business! {
@@ -31,6 +34,16 @@ class BusinessCell: UITableViewCell {
             reviewsCountLabel.text = "\(business.reviewCount!)"
             ratingImageView.setImageWith(business.ratingImageURL!, placeholderImage: nil)
             distanceLabel.text = business.distance
+            phoneLabel.text = business.phoneNumber
+            if business.isClosed! {
+                openCloseLabel.text = "Closed"
+                openCloseLabel.textColor = UIColor.red
+            }
+            else {
+                openCloseLabel.text = "Open"
+                openCloseLabel.textColor = UIColor.green
+            }
+            aboutRestaurant.text = business.aboutRestaurant
         }
     }
     

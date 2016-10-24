@@ -17,6 +17,10 @@ class Business: NSObject {
     let ratingImageURL: URL?
     let reviewCount: NSNumber?
     
+    let phoneNumber: String?
+    let isClosed: Bool?
+    let aboutRestaurant: String?
+    
     init(dictionary: NSDictionary) {
         name = dictionary["name"] as? String
         
@@ -71,6 +75,28 @@ class Business: NSObject {
         } else {
             ratingImageURL = nil
         }
+        
+        var phoneNumber = ""
+        let phoneNumberString = dictionary["display_phone"] as? String
+        if phoneNumberString != nil {
+            phoneNumber = phoneNumberString!
+        }
+        else{
+            phoneNumber = "no phone#"
+        }
+        self.phoneNumber = phoneNumber
+
+        self.isClosed = dictionary["is_closed"] as? Bool
+        
+        var aboutRestaurant = ""
+        let aboutRestaurantString = dictionary["snippet_text"] as? String
+        if aboutRestaurantString != nil {
+            aboutRestaurant = aboutRestaurantString!
+        }
+        else{
+            aboutRestaurant = "no description"
+        }
+        self.aboutRestaurant = aboutRestaurant
         
         reviewCount = dictionary["review_count"] as? NSNumber
     }
