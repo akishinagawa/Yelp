@@ -63,10 +63,21 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         super.didReceiveMemoryWarning()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
     
+    // TODO: remove keybaord when tap outside
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        self.view.endEditing(true)
+//    }
+//    
+//
+//    @IBAction func tapScreen(_ sender: AnyObject) {
+//        self.view.endEditing(true)
+//    }
+//    func textFieldShouldReturn(textField: UITextField!) -> Bool{
+//        textField.resignFirstResponder()
+//        
+//        return true
+//    }
 
     
     
@@ -153,13 +164,23 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
      }
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-        let categories = filters["categories"] as? [String]
         
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil, completion: { (businesses: [Business]?, error: Error?) -> Void in
+        
+        let sortBy = YelpSortMode(rawValue:(filters["sortBy"] as! Int))
+        let categories = filters["categories"] as? [String]
+        let deals = filters["deal"] as? Bool
+        let distance = filters["distance"] as? Double
+        
+        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: deals, distance:distance, completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
 
         })
+        
+        
+        
+        
+        
     }
     
 }
