@@ -25,6 +25,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        
         searchBar = UISearchBar()
         searchBar.sizeToFit()
         searchBar.placeholder = "Resutarurants"
