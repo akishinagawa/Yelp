@@ -241,10 +241,27 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
 
      // MARK: - Navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let navigationController = segue.destination as! UINavigationController
-        let filtersViewController = navigationController.topViewController as! FiltersViewController
+        self.searchBar.endEditing(true)
         
-        filtersViewController.delegate = self
+        if segue.identifier == "toFilters" {
+            let navigationController = segue.destination as! UINavigationController
+            let filtersViewController = navigationController.topViewController as! FiltersViewController
+            
+            filtersViewController.delegate = self
+        }
+        else if segue.identifier == "toDetails" {
+            let cell = sender as! UITableViewCell
+            let indexPath = tableView.indexPath(for: cell)
+            
+            var business = businesses[(indexPath?.row)!]
+            if self.isOnSearched == true {
+                business = searchedBusinesses![indexPath!.row]
+            }
+    
+            let navigationController = segue.destination as! UINavigationController
+            let detailsViewController = navigationController.topViewController as! DetailsViewController
+            detailsViewController.business = business
+        }
      }
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
