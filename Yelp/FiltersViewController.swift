@@ -64,7 +64,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         selectedDistance = 0
         distancesStates = [1: true, 2: false, 3: false, 4: false]
-        selectedSort = -1
+        selectedSort = 0
+        sortByStates = [1: true, 2: false, 3: false]
         
         // tableView settings
         tableView.delegate = self
@@ -157,16 +158,12 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
             
         case 2:
-            return sortBy.count
-            
-            /* Expand feature
-            if sortByHeaderOpened == true {
-                return sortBy.count
+            if (sortByHeaderOpened == true) {
+                return sortBy.count + 1
             }
             else {
                 return 1
             }
-            */
             
         case 3:
             return categories.count
@@ -217,11 +214,19 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
             
         case 2:
-            cell = tableView.dequeueReusableCell(withIdentifier:"SwitchCell", for: indexPath) as! SwitchCell
-            (cell as! SwitchCell).switchLabel.text = sortBy[row]
-            //(cell as! SwitchCell).onSwitch.isOn = sortByStates[row] ?? false
-            (cell as! SwitchCell).onSwitch.setOn(sortByStates[row] ?? false, animated: false)
-            (cell as! SwitchCell).delegate = self
+            
+            if (row == 0) {
+                cell = tableView.dequeueReusableCell(withIdentifier:"ExpandableCell", for: indexPath) as! ExpandableCell
+                (cell as! ExpandableCell).statusLabel.text = sortBy[selectedSort]
+            }
+            else {
+                cell = tableView.dequeueReusableCell(withIdentifier:"SwitchCell", for: indexPath) as! SwitchCell
+                (cell as! SwitchCell).switchLabel.text = sortBy[row - 1]
+                //(cell as! SwitchCell).onSwitch.isOn = sortByStates[row] ?? false
+                (cell as! SwitchCell).onSwitch.setOn(sortByStates[row] ?? false, animated: false)
+                (cell as! SwitchCell).delegate = self
+            }
+
             
         case 3:
             cell = tableView.dequeueReusableCell(withIdentifier:"SwitchCell", for: indexPath) as! SwitchCell
@@ -270,10 +275,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
 
             if value == true {
                 sortByStates[indexPath.row] = value
-                selectedSort = indexPath.row
+                selectedSort = indexPath.row - 1
             }
             else {
-                sortByStates[0] = true
+                sortByStates[1] = true
                 selectedSort = 0
             }
             
@@ -311,7 +316,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
 
         case 2:
-            print("done nothing")
+            if row == 0 {
+                sortByHeaderOpened = !sortByHeaderOpened
+                let section = NSIndexSet(index: section)
+                self.tableView.reloadSections(section as IndexSet, with: UITableViewRowAnimation.automatic)
+            }
             
         case 3:
             print("done nothing")
