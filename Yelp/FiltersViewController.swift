@@ -62,7 +62,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         categoriesHeaderOpened = false
         categories = yelpCategories()
         
-        selectedDistance = -1
+        selectedDistance = 0
+        distancesStates = [1: true, 2: false, 3: false, 4: false]
         selectedSort = -1
         
         // tableView settings
@@ -90,7 +91,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         var distanceAmount:Double
         switch selectedDistance {
         case 0:
-            distanceAmount = 32187.0 // 20.0 miles
+            distanceAmount = 32187.0 // 20.0 miles / Auto
         case 1:
             distanceAmount = 483.0 // 0.3 mile
         case 2:
@@ -106,7 +107,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         // sort by
         var sortById:Int
-        switch selectedDistance {
+        switch selectedSort {
         case 0:
             sortById = 0
         case 1:
@@ -148,16 +149,12 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             return 1
             
         case 1:
-            return distances.count
-            
-            /* Expand feature
-            if distanceHeaderOpened == true {
-                return distances.count
+            if (distanceHeaderOpened == true) {
+                return distances.count + 1
             }
             else {
                 return 1
             }
-            */
             
         case 2:
             return sortBy.count
@@ -194,46 +191,58 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
 //        print ("indexPath Row ID = \(indexPath.row)")
 //        print ("---------------------------------------------------------->>>><<<<<<<<<<<")
         
-        let cell = tableView.dequeueReusableCell(withIdentifier:"SwitchCell", for: indexPath) as! SwitchCell
+        let cell:UITableViewCell!
         let section = indexPath.section 
         let row = indexPath.row
 
         switch section {
         case 0:
-            cell.switchLabel.text = "Offering a Deal"
-            //cell.onSwitch.isOn = isDealOn ?? false
-            cell.onSwitch.setOn(isDealOn ?? false, animated: false)
+            cell = tableView.dequeueReusableCell(withIdentifier:"SwitchCell", for: indexPath) as! SwitchCell
+            (cell as! SwitchCell).switchLabel.text = "Offering a Deal"
+            //(cell as! SwitchCell).onSwitch.isOn = isDealOn ?? false
+            (cell as! SwitchCell).onSwitch.setOn(isDealOn ?? false, animated: false)
+            (cell as! SwitchCell).delegate = self
             
         case 1:
-            cell.switchLabel.text = distances[row]
-            //cell.onSwitch.isOn = distancesStates[row] ?? false
-            cell.onSwitch.setOn(distancesStates[row] ?? false, animated: false)
+            if (row == 0) {
+                cell = tableView.dequeueReusableCell(withIdentifier:"ExpandableCell", for: indexPath) as! ExpandableCell
+                (cell as! ExpandableCell).statusLabel.text = distances[selectedDistance]
+            }
+            else {
+                cell = tableView.dequeueReusableCell(withIdentifier:"SwitchCell", for: indexPath) as! SwitchCell
+                (cell as! SwitchCell).switchLabel.text = distances[row - 1]
+                //(cell as! SwitchCell).onSwitch.isOn = distancesStates[row] ?? false
+                (cell as! SwitchCell).onSwitch.setOn(distancesStates[row] ?? false, animated: false)
+                (cell as! SwitchCell).delegate = self
+            }
             
         case 2:
-            cell.switchLabel.text = sortBy[row]
-            //cell.onSwitch.isOn = sortByStates[row] ?? false
-            cell.onSwitch.setOn(sortByStates[row] ?? false, animated: false)
+            cell = tableView.dequeueReusableCell(withIdentifier:"SwitchCell", for: indexPath) as! SwitchCell
+            (cell as! SwitchCell).switchLabel.text = sortBy[row]
+            //(cell as! SwitchCell).onSwitch.isOn = sortByStates[row] ?? false
+            (cell as! SwitchCell).onSwitch.setOn(sortByStates[row] ?? false, animated: false)
+            (cell as! SwitchCell).delegate = self
             
         case 3:
-            cell.switchLabel.text = categories[row]["name"]
-            //cell.onSwitch.isOn = categoriesStates[row] ?? false
-            cell.onSwitch.setOn(categoriesStates[row] ?? false, animated: false)
+            cell = tableView.dequeueReusableCell(withIdentifier:"SwitchCell", for: indexPath) as! SwitchCell
+            (cell as! SwitchCell).switchLabel.text = categories[row]["name"]
+            //(cell as! SwitchCell).onSwitch.isOn = categoriesStates[row] ?? false
+            (cell as! SwitchCell).onSwitch.setOn(categoriesStates[row] ?? false, animated: false)
+            (cell as! SwitchCell).delegate = self
             
         default:
-            cell.switchLabel.text = "no data"
-            cell.onSwitch.isOn = false
+            cell = tableView.dequeueReusableCell(withIdentifier:"SwitchCell", for: indexPath) as! SwitchCell
+            (cell as! SwitchCell).switchLabel.text = "no data"
+            (cell as! SwitchCell).onSwitch.isOn = false
+            (cell as! SwitchCell).delegate = self
         }
         
-        cell.delegate = self
+        
 
         return cell
     }
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
-        //        print ("indexPath Section = \(indexPath.section)")
-        //        print ("indexPath Row ID = \(indexPath.row)")
-        //        print ("---------------------------------------------------------->>>>")
-        
         let indexPath = tableView.indexPath(for: switchCell)!
 
         switch indexPath.section {
@@ -247,10 +256,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             if value == true {
                 distancesStates[indexPath.row] = value
-                selectedDistance = indexPath.row
+                selectedDistance = indexPath.row - 1
             }
             else {
-                distancesStates[0] = true
+                distancesStates[1] = true
                 selectedDistance = 0
             }
     
@@ -277,6 +286,44 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         tableView.reloadData()
     }
+    
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        print ("indexPath Section = \(indexPath.section)")
+        print ("indexPath Row ID = \(indexPath.row)")
+        print ("---------------------------------------------------------->>>>")
+        
+        
+        let section = indexPath.section
+        let row = indexPath.row
+        
+        switch indexPath.section {
+        case 0:
+            print("done nothing")
+            
+        case 1:
+            if row == 0 {
+                distanceHeaderOpened = !distanceHeaderOpened
+                let section = NSIndexSet(index: section)
+                self.tableView.reloadSections(section as IndexSet, with: UITableViewRowAnimation.automatic)
+            }
+
+        case 2:
+            print("done nothing")
+            
+        case 3:
+            print("done nothing")
+            
+        default:
+            print("done nothing")
+        }
+    }
+    
+    
+    
+    
     
 
     func yelpCategories() -> [[String:String]] {

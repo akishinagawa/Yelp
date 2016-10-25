@@ -23,5 +23,17 @@ class ExpandableCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    func toggleIcon(toggleUp: Bool) {
+        
+//        let rotateAngle:Float!
+//        if(toggleUp) {
+//            rotateAngle = 0.0
+//        }
+//        else {
+//            rotateAngle = 180.0
+//        }
+
+    }
 
 }
