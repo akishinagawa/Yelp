@@ -19,6 +19,7 @@
 		47848697133B87663A122E3D /* Pods_YelpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A1000F3975EB43318C1D4FA /* Pods_YelpTests.framework */; };
 		A82388241DBDC5230018F93C /* RadioButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82388231DBDC5230018F93C /* RadioButtonCell.swift */; };
 		A8260AA01DB9F6390034A6B4 /* BusinessCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8260A9F1DB9F6390034A6B4 /* BusinessCell.swift */; };
+		A864F30B1DBEDC87005E8AE6 /* InfiniteScrollActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F30A1DBEDC87005E8AE6 /* InfiniteScrollActivityView.swift */; };
 		A869A8431DBC703600B0882A /* SwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869A8421DBC703600B0882A /* SwitchCell.swift */; };
 		A869A8451DBC754A00B0882A /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869A8441DBC754A00B0882A /* FiltersViewController.swift */; };
 		A86EA1AA1DBDB92300939983 /* ExpandableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86EA1A91DBDB92300939983 /* ExpandableCell.swift */; };
@@ -55,6 +56,7 @@
 		9B128C050DE78660DE2A8E75 /* Pods-YelpTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YelpTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YelpTests/Pods-YelpTests.release.xcconfig"; sourceTree = "<group>"; };
 		A82388231DBDC5230018F93C /* RadioButtonCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButtonCell.swift; sourceTree = "<group>"; };
 		A8260A9F1DB9F6390034A6B4 /* BusinessCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusinessCell.swift; sourceTree = "<group>"; };
+		A864F30A1DBEDC87005E8AE6 /* InfiniteScrollActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfiniteScrollActivityView.swift; sourceTree = "<group>"; };
 		A869A8421DBC703600B0882A /* SwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchCell.swift; sourceTree = "<group>"; };
 		A869A8441DBC754A00B0882A /* FiltersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
 		A86EA1A91DBDB92300939983 /* ExpandableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableCell.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				A86EA1AB1DBDB99400939983 /* SeeAllCell.swift */,
 				A86EA1AD1DBDC24C00939983 /* DealSwitchCell.swift */,
 				A82388231DBDC5230018F93C /* RadioButtonCell.swift */,
+				A864F30A1DBEDC87005E8AE6 /* InfiniteScrollActivityView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A864F30B1DBEDC87005E8AE6 /* InfiniteScrollActivityView.swift in Sources */,
 				A82388241DBDC5230018F93C /* RadioButtonCell.swift in Sources */,
 				A8260AA01DB9F6390034A6B4 /* BusinessCell.swift in Sources */,
 				22AAAA9C1AEA1EC300A544AF /* BusinessesViewController.swift in Sources */,

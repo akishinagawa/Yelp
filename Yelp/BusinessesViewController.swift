@@ -15,13 +15,13 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     var searchBar: UISearchBar!
     var isOnSearched: Bool!
     var isMoreDataLoading: Bool!
+    var loadingMoreView:InfiniteScrollActivityView?
     var reloadDataCount: Int!
     var previousFilters: [String : AnyObject]!
     var previousSearchedText:String!
     
     @IBOutlet weak var tableView: UITableView!
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,6 +40,16 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
+        //loading
+        let frame = CGRect(x:0, y:tableView.contentSize.height, width: tableView.bounds.size.width, height: InfiniteScrollActivityView.defaultHeight)
+        loadingMoreView = InfiniteScrollActivityView(frame: frame)
+        loadingMoreView!.isHidden = true
+        tableView.addSubview(loadingMoreView!)
+        
+        var insets = tableView.contentInset;
+        insets.bottom += InfiniteScrollActivityView.defaultHeight;
+        tableView.contentInset = insets
+        
         Business.searchWithTerm(term: "Thai", reloadCount: reloadDataCount, completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
@@ -52,18 +62,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             }
             
         })
-        
-        /* Example of Yelp search with more search options specified
-         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-         self.businesses = businesses
-         
-         for business in businesses {
-         print(business.name!)
-         print(business.address!)
-         }
-         }
-         */
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -167,29 +165,27 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     
     // TableView related ---
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        print("did scroll ------------------------------------<<<<<<<< ")
-        
         if (!isMoreDataLoading) {
             let scrollViewContentHeight = tableView.contentSize.height
             let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
             
             if (scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
                 isMoreDataLoading = true
+                
+                let frame = CGRect(x:0, y:tableView.contentSize.height, width: tableView.bounds.size.width, height:InfiniteScrollActivityView.defaultHeight)
+                loadingMoreView?.frame = frame
+                loadingMoreView!.startAnimating()
+                
                 loadMoreData()
             }
         }
     }
     
-    
     func loadMoreData() {
-        
         reloadDataCount! += 1
         
         if previousFilters != nil {
-            
             let sortBy = YelpSortMode(rawValue:(previousFilters["sortBy"] as! Int))
             let categories = previousFilters["categories"] as? [String]
             let deals = previousFilters["deal"] as? Bool
@@ -214,6 +210,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                     self.tableView.reloadData()
                 }
                 self.isMoreDataLoading = false
+                self.loadingMoreView!.stopAnimating()
             })
         }
         else {
@@ -235,6 +232,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                     self.tableView.reloadData()
                 }
                 self.isMoreDataLoading = false
+                self.loadingMoreView!.stopAnimating()
             })
         }
     }
@@ -259,7 +257,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: deals, distance:distance, reloadCount: 0, completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
-
         })
     }
     
